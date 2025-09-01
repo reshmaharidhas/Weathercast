@@ -17,7 +17,7 @@
 
     {% if is_lat_lon_correct %}
         <div class="container">
-            <p>Latitute: {{lat_var}}, Longitude: {{lon_var}}</p>
+            <p>Latitude: {{lat_var}}, Longitude: {{lon_var}}</p>
             <h5>Temperature: {{curr_temp}}&#8451;</h5>
             <h5>Feels like {{feels_like_temp}}&#8451;</h5>
             <h5>{{curr_weather_desc_1}}</h5>
@@ -25,4 +25,5 @@
         </div>
     {% endif %}
 </div>
+
 {% endblock %}
