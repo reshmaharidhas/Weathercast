@@ -1,0 +1,28 @@
+{% extends "basefile.html" %}
+{% block content %}
+<div class="container mx-auto text-center pt-3">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <h3 class="text-danger">{{msg}}</h3>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if location_city=="" %}
+        <h4></h4>
+    {% else %}
+        <h4>Location: {{location_city}}, {{location_country}}</h4>
+    {% endif %}
+
+    {% if is_lat_lon_correct %}
+        <div class="container">
+            <p>Latitute: {{lat_var}}, Longitude: {{lon_var}}</p>
+            <h5>Temperature: {{curr_temp}}&#8451;</h5>
+            <h5>Feels like {{feels_like_temp}}&#8451;</h5>
+            <h5>{{curr_weather_desc_1}}</h5>
+            <h5>Min: {{min_temp}}&#8451;, Max: {{max_temp}}&#8451;</h5>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
