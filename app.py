@@ -368,12 +368,14 @@ def add_or_remove_star():
             ptr_index = session.get("last_clicked_ptr")
             fav_locations_dict = session.get("fav_locations")
             lat_lon_key_formed = str(session.get("cities_lat_arr")[ptr_index]) + "&" + str(session.get("cities_lon_arr")[ptr_index])
+            print(lat_lon_key_formed)
             if lat_lon_key_formed not in fav_locations_dict:
                 fav_locations_dict[
                     str(session.get("cities_lat_arr")[ptr_index]) + "&" + str(session.get("cities_lon_arr")[ptr_index])] = response_json["name"]+", "+response_json_2["location"]["region"]+", "+response_json_2["location"]["country"]
             else:
                 fav_locations_dict.pop(
                     str(session.get("cities_lat_arr")[ptr_index]) + "&" + str(session.get("cities_lon_arr")[ptr_index]))
+            print(session.get("fav_locations"))    
     else:
         return render_template("weathercast.html")
 
@@ -939,4 +941,5 @@ def sports():
 
 if __name__=="__main__":
     app.run(debug=True)
+
 
