@@ -1,5 +1,6 @@
 import requests
 import os
+os.environ["MPLCONFIGDIR"] = "/tmp"
 from flask import Flask, render_template, request, flash, redirect, url_for, session
 from dotenv import load_dotenv
 from datetime import timedelta
@@ -982,4 +983,5 @@ def sports():
 # Running the flask app.
 if __name__=="__main__":
     app.run(debug=True)
+
 
