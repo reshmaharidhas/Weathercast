@@ -1,0 +1,37 @@
+{% extends "basefile.html" %}
+{% block content %}
+<div class="container-fluid text-center">
+    <h5 class="pt-3">3 days pollen forecast for {{location_city}}</h5>
+    <form method="POST">
+        <div class="container pb-2">
+            <button type="submit" name="btn_alder" class="btn text-white px-2 my-2 {% if active_button=="btn_alder" %}btn-primary{% else %}bg-dark{% endif %}">
+                Alder
+            </button>
+            <button type="submit" name="btn_birch" class="btn text-white px-2 my-2 {% if active_button=="btn_birch" %}btn-primary{% else %}bg-dark{% endif %}">
+                Birch
+            </button>
+            <button type="submit" name="btn_grass" class="btn text-white px-2 my-2 {% if active_button=="btn_grass" %}btn-primary{% else %}bg-dark{% endif %}">
+                Grass
+            </button>
+            <button type="submit" name="btn_mugwort" class="btn text-white px-2 my-2 {% if active_button=="btn_mugwort" %}btn-primary{% else %}bg-dark{% endif %}">
+                Mugwort
+            </button>
+            <button type="submit" name="btn_olive" class="btn text-white px-2 my-2 {% if active_button=="btn_olive" %}btn-primary{% else %}bg-dark{% endif %}">
+                Olive
+            </button>
+            <button type="submit" name="btn_ragweed" class="btn text-white px-2 my-2 {% if active_button=="btn_ragweed" %}btn-primary{% else %}bg-dark{% endif %}">
+                Ragweed
+            </button>
+        </div>
+    </form>
+    {% if pollen_available==True %}
+    <div class="container-fluid pt-2">
+        <!-- Graph generated using flask with pollen -->
+        <img src="data:image/png;base64,{{ pollen_graph }}" class="img-fluid"/>
+    </div>
+    {% else %}
+        <h5>Pollen data unavailable for locations outside Europe.</h5>
+    {% endif %}
+</div>
+
+{% endblock %}

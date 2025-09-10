@@ -1,0 +1,12 @@
+{% extends "basefile.html" %}
+{% block content %}
+    <div class="container mx-auto text-center">
+    <h4>Favorites</h4>
+    <!-- Iterating through the starred_locations array -->
+    {% for every_starred_city in starred_locations %}
+        <p>{{starred_locations.get(every_starred_city)}}</p>
+    {% endfor %}
+    <p class="pt-5">Note: Only 20 locations can be starred as favorites. </p>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "basefile.html" %}
+{% block content %}
+<h5 class="text-center pt-3">3 day forecasts for {{location_city}}</h5>
+<div class="container-fluid mx-auto text-center">
+    <div>
+        <!-- Form containing buttons to view different forecast -->
+        <form method="POST">
+            <div class="container pb-2">
+                <!-- Button to view temperature -->
+                <button type="submit" name="btn_temperature" class="btn text-white px-2 my-2 {% if active_button=="btn_temperature" %}btn-primary{% else %}bg-dark{% endif %}">
+                    Temperature
+                </button>
+                <!-- Button to view feels like temperature -->
+                <button type="submit" name="btn_temp_feels_like" class="btn text-white px-2 my-2 {% if active_button=="btn_temp_feels_like" %}btn-primary{% else %}bg-dark{% endif %}">
+                    Feels like
+                </button>
+                <!-- Button to view wind forecast-->
+                <button type="submit" name="btn_wind" class="btn text-white px-2 my-2 {% if active_button=="btn_wind" %}btn-primary{% else %}bg-dark{% endif %}">
+                    Wind
+                </button>
+                <!-- Button to view wind gust forecast-->
+                <button type="submit" name="btn_wind_gust" class="btn text-white px-2 my-2 {% if active_button=="btn_wind_gust" %}btn-primary{% else %}bg-dark{% endif %}">
+                    Wind Gusts
+                </button>
+                <!-- Button to view precipitation forecast-->
+                <button type="submit" name="btn_precipitation" class="btn text-white px-2 my-2 {% if active_button=="btn_precipitation" %}btn-primary{% else %}bg-dark{% endif %}">
+                    Precipitation
+                </button>
+                <!-- Button to view humidity forecast-->
+                <button type="submit" name="btn_humidity" class="btn text-white px-2 my-2 {% if active_button=="btn_humidity" %}btn-primary{% else %}bg-dark{% endif %}">
+                    Humidity
+                </button>
+                <!-- Button to view pressure forecast-->
+                <button type="submit" name="btn_pressure" class="btn text-white px-2 my-2 {% if active_button=="btn_pressure" %}btn-primary{% else %}bg-dark{% endif %}">
+                    Pressure
+                </button>
+                <!-- Button to view dew point forecast-->
+                <button type="submit" name="btn_dewpoint" class="btn text-white px-2 my-2 {% if active_button=="btn_dewpoint" %}btn-primary{% else %}bg-dark{% endif %}">
+                    Dew point
+                </button>
+                <!-- Button to view chance of rain forecast-->
+                <button type="submit" name="btn_chance_of_rain" class="btn text-white px-2 my-2 {% if active_button=="btn_chance_of_rain" %}btn-primary{% else %}bg-dark{% endif %}">
+                    Chance of Rain
+                </button>
+                <!-- Button to view snowfall forecast-->
+                <button type="submit" name="btn_snowfall" class="btn text-white px-2 my-2 {% if active_button=="btn_snowfall" %}btn-primary{% else %}bg-dark{% endif %}">
+                    Snowfall
+                </button>
+                <!-- Button to view visibility forecast-->
+                <button type="submit" name="btn_visibility" class="btn text-white px-2 my-2 {% if active_button=="btn_visibility" %}btn-primary{% else %}bg-dark{% endif %}">
+                    Visibility
+                </button>
+                <!-- Button to view UV forecast-->
+                <button type="submit" name="btn_uv" class="btn text-white px-2 my-2 {% if active_button=="btn_uv" %}btn-primary{% else %}bg-dark{% endif %}">
+                    UV
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="container-fluid pt-2">
+        <!-- seaborn graph displaying forecasts using Flask -->
+        <img src="data:image/png;base64,{{ graph }}" class="img-fluid"/>
+    </div>
+</div>
+{% endblock %}

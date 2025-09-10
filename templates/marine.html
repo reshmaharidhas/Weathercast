@@ -1,0 +1,18 @@
+{% extends "basefile.html" %}
+{% block content %}
+<h5 class="text-center mx-auto pt-2">Marine Weather</h5>
+<div class="container text-center mx-auto bg-info p-4" style="width:400px">
+    <h6>{{current_date}}</h6>
+    <h6>Min temperature: {{marine_min_temp}}{{temp_unit_value}}</h6>
+    <h6>Max temperature: {{marine_max_temp}}{{temp_unit_value}}</h6>
+    <h6>Maximum wind speed: {{marine_max_wind_speed}} mph</h6>
+    <h6>Total precipitation: {{marine_total_precipitation}} mm</h6>
+    <h6>Average visibility: {{average_visibility_miles}} miles</h6>
+    <h6>Average humidity: {{average_humidity}}%</h6>
+    <h6>UV index: {{marine_uv_index}}</h6>
+    <h6>Sunrise: {{marine_sunrise}}</h6>
+    <h6>Sunset: {{marine_sunset}}</h6>
+    <h6>Moon rise: {{marine_moonrise}}</h6>
+    <h6>Moon set: {{marine_moonset}}</h6>
+</div>
+{% endblock %}

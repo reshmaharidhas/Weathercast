@@ -1,0 +1,59 @@
+{% extends "basefile.html" %}
+{% block content %}
+<div class="container mx-auto text-center pt-3">
+    <h4>Upcoming matches in {{location_city}}</h4>
+    <div class="row pt-2">
+        <!--Column container for displaying upcoming football matches from Sports API -->
+        <div class="col-md-4 container pt-2" style="background-color:#154D71">
+            <div>
+                <img width="60" height="60" src="https://img.icons8.com/comic/100/FFFFFF/football2.png" alt="football2"/>
+                <h4 class="text-white">Football</h4>
+            </div>
+            <!-- Iterating through the array 'football_matches' and displaying every football match in card -->
+            {% for every_match in football_matches %}
+            <div class="card bg-info">
+                <h5>{{every_match["tournament"]}}</h5>
+                <p>{{every_match["match"]}}</p>
+                <p>{{every_match["start"]}}</p>
+                <p>{{every_match["stadium"]}}</p>
+                <p>{{every_match["country"]}}</p>
+            </div><br>
+            {% endfor %}
+        </div>
+        <!--Column container for displaying upcoming cricket matches from Sports API -->
+        <div class="col-md-4 container pt-2 bg-primary">
+            <div>
+                <img width="60" height="60" src="https://img.icons8.com/external-icongeek26-flat-icongeek26/64/external-cricket-india-icongeek26-flat-icongeek26.png" alt="external-cricket-india-icongeek26-flat-icongeek26"/>
+                <h4 class="text-white">Cricket</h4>
+            </div>
+            <!-- Iterating through the array 'cricket_matches' and displaying every cricket match in card -->
+            {% for every_match in cricket_matches %}
+            <div class="card bg-info">
+                <h5>{{every_match["tournament"]}}</h5>
+                <p>{{every_match["match"]}}</p>
+                <p>{{every_match["start"]}}</p>
+                <p>{{every_match["stadium"]}}</p>
+                <p>{{every_match["country"]}}</p>
+            </div><br>
+            {% endfor %}
+        </div>
+        <!--Column container for displaying upcoming golf matches from Sports API -->
+        <div class="col-md-4 container pt-2" style="background-color:#154D71">
+            <div>
+                <img width="60" height="60" src="https://img.icons8.com/office/40/golf-ball.png" alt="golf-ball"/>
+                <h4 class="text-white">Golf</h4>
+            </div>
+            <!-- Iterating through the array 'golf_matches' and displaying every golf match in card -->
+            {% for every_match in golf_matches %}
+            <div class="card bg-info">
+                <h5>{{every_match["tournament"]}}</h5>
+                <p>{{every_match["match"]}}</p>
+                <p>{{every_match["start"]}}</p>
+                <p>{{every_match["stadium"]}}</p>
+                <p>{{every_match["country"]}}</p>
+            </div><br>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
