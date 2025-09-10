@@ -139,9 +139,6 @@ def index():
             sports_response_1 = requests.get(sports_api_url)
             sports_status_1 = sports_response_1.status_code
             # Openmetoo API for Pollen forecast details for 3 days
-            cache_session = requests_cache.CachedSession('.cache', expire_after=3600)
-            retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
-            openmeteo = openmeteo_requests.Client(session=retry_session)
             url = "https://air-quality-api.open-meteo.com/v1/air-quality"
             params = {
                 "latitude": cities_lat_arr[ptr_index],
@@ -150,9 +147,8 @@ def index():
                            "ragweed_pollen"],
                 "forecast_days": 3,
             }
-            responses = openmeteo.weather_api(url, params=params)
-            pollen_response = responses[0]
-            hourly = pollen_response.Hourly()
+            responses = requests.get(url, params=params)
+            pollen_response = responses.json()
             # Checking if all the API endpoints are active in status. Status code 200 means active.
             if status==200 and status_2==200 and forecast_status_1==200 and marine_status_1==200 and sports_status_1==200:
                 global response_json, response_json_2, forecast_response_json_1, marine_response_json_1, sports_response_json_1, hourly_pollen_json, hourly_var
@@ -161,7 +157,7 @@ def index():
                 forecast_response_json_1 = forecast_response_1.json()
                 marine_response_json_1 = marine_response_1.json()
                 sports_response_json_1 = sports_response_1.json()
-                hourly_var = hourly
+                hourly_pollen_json = pollen_response
                 current_temperature = ""
                 feels_like_temperature = ""
                 min_temp = ""
@@ -230,26 +226,6 @@ def index():
                     temp_hour_arr = temp_hour_f_arr
                 session["last_visited"] = [lat_var,lon_var]
                 session["last_clicked_ptr"]=ptr_index
-                # Pollen forecast for 3 days
-                hourly_alder_pollen = hourly.Variables(0).ValuesAsNumpy()
-                hourly_birch_pollen = hourly.Variables(1).ValuesAsNumpy()
-                hourly_grass_pollen = hourly.Variables(2).ValuesAsNumpy()
-                hourly_mugwort_pollen = hourly.Variables(3).ValuesAsNumpy()
-                hourly_olive_pollen = hourly.Variables(4).ValuesAsNumpy()
-                hourly_ragweed_pollen = hourly.Variables(5).ValuesAsNumpy()
-                hourly_data = {"date": pd.date_range(
-                    start=pd.to_datetime(hourly.Time(), unit="s", utc=True),
-                    end=pd.to_datetime(hourly.TimeEnd(), unit="s", utc=True),
-                    freq=pd.Timedelta(seconds=hourly.Interval()),
-                    inclusive="left"
-                )}
-                hourly_data["alder_pollen"] = hourly_alder_pollen
-                hourly_data["birch_pollen"] = hourly_birch_pollen
-                hourly_data["grass_pollen"] = hourly_grass_pollen
-                hourly_data["mugwort_pollen"] = hourly_mugwort_pollen
-                hourly_data["olive_pollen"] = hourly_olive_pollen
-                hourly_data["ragweed_pollen"] = hourly_ragweed_pollen
-                hourly_pollen_json = hourly_data
                 return render_template("weathercast.html",cities_arr=cities_arr,location_city=city_name,
                                        location_region=region_name,location_country=country_name,
                                        curr_temp=current_temperature,feels_like_temp=feels_like_temperature,
@@ -346,26 +322,6 @@ def index():
                 temp_hour_arr = temp_hour_f_arr
             session["last_visited"] = [lat_var, lon_var]
             session["last_clicked_ptr"] = ptr_index
-            # Pollen forecast values for 3 days.
-            hourly_alder_pollen = hourly_var.Variables(0).ValuesAsNumpy()
-            hourly_birch_pollen = hourly_var.Variables(1).ValuesAsNumpy()
-            hourly_grass_pollen = hourly_var.Variables(2).ValuesAsNumpy()
-            hourly_mugwort_pollen = hourly_var.Variables(3).ValuesAsNumpy()
-            hourly_olive_pollen = hourly_var.Variables(4).ValuesAsNumpy()
-            hourly_ragweed_pollen = hourly_var.Variables(5).ValuesAsNumpy()
-            hourly_data = {"date": pd.date_range(
-                start=pd.to_datetime(hourly_var.Time(), unit="s", utc=True),
-                end=pd.to_datetime(hourly_var.TimeEnd(), unit="s", utc=True),
-                freq=pd.Timedelta(seconds=hourly_var.Interval()),
-                inclusive="left"
-            )}
-            hourly_data["alder_pollen"] = hourly_alder_pollen
-            hourly_data["birch_pollen"] = hourly_birch_pollen
-            hourly_data["grass_pollen"] = hourly_grass_pollen
-            hourly_data["mugwort_pollen"] = hourly_mugwort_pollen
-            hourly_data["olive_pollen"] = hourly_olive_pollen
-            hourly_data["ragweed_pollen"] = hourly_ragweed_pollen
-            hourly_pollen_json = hourly_data
             return render_template("weathercast.html", cities_arr=session.get("cities_arr"), location_city=city_name,
                                    location_region=region_name, location_country=country_name,
                                    curr_temp=current_temperature, feels_like_temp=feels_like_temperature,
@@ -881,9 +837,9 @@ def pollen():
     if request.method=="POST":
         # When Alder button is clicked.
         if "btn_alder" in request.form:
-            y_values_arr_1 = hourly_pollen_json["alder_pollen"][0:24]
-            y_values_arr_2 = hourly_pollen_json["alder_pollen"][24:48]
-            y_values_arr_3 = hourly_pollen_json["alder_pollen"][48:]
+            y_values_arr_1 = hourly_pollen_json["hourly"]["alder_pollen"][0:24]
+            y_values_arr_2 = hourly_pollen_json["hourly"]["alder_pollen"][24:48]
+            y_values_arr_3 = hourly_pollen_json["hourly"]["alder_pollen"][48:]
             if y_values_arr_1[0]=="nan":
                 pollen_available = False
             active_button = "btn_alder"
@@ -893,9 +849,9 @@ def pollen():
                                    pollen_available=pollen_available,location_city=city_name)
         # When Birch button is clicked.
         elif "btn_birch" in request.form:
-            y_values_arr_1 = hourly_pollen_json["birch_pollen"][0:24]
-            y_values_arr_2 = hourly_pollen_json["birch_pollen"][24:48]
-            y_values_arr_3 = hourly_pollen_json["birch_pollen"][48:]
+            y_values_arr_1 = hourly_pollen_json["hourly"]["birch_pollen"][0:24]
+            y_values_arr_2 = hourly_pollen_json["hourly"]["birch_pollen"][24:48]
+            y_values_arr_3 = hourly_pollen_json["hourly"]["birch_pollen"][48:]
             active_button = "btn_birch"
             if y_values_arr_1[0]=="nan":
                 pollen_available = False
@@ -905,9 +861,9 @@ def pollen():
                                    pollen_available=pollen_available,location_city=city_name)
         # When Grass button is clicked.
         elif "btn_grass" in request.form:
-            y_values_arr_1 = hourly_pollen_json["grass_pollen"][0:24]
-            y_values_arr_2 = hourly_pollen_json["grass_pollen"][24:48]
-            y_values_arr_3 = hourly_pollen_json["grass_pollen"][48:]
+            y_values_arr_1 = hourly_pollen_json["hourly"]["grass_pollen"][0:24]
+            y_values_arr_2 = hourly_pollen_json["hourly"]["grass_pollen"][24:48]
+            y_values_arr_3 = hourly_pollen_json["hourly"]["grass_pollen"][48:]
             if y_values_arr_1[0]=="nan":
                 pollen_available = False
             active_button = "btn_grass"
@@ -917,9 +873,9 @@ def pollen():
                                    pollen_available=pollen_available,location_city=city_name)
         # When Mugwort button is clicked.
         elif "btn_mugwort" in request.form:
-            y_values_arr_1 = hourly_pollen_json["mugwort_pollen"][0:24]
-            y_values_arr_2 = hourly_pollen_json["mugwort_pollen"][24:48]
-            y_values_arr_3 = hourly_pollen_json["mugwort_pollen"][48:]
+            y_values_arr_1 = hourly_pollen_json["hourly"]["mugwort_pollen"][0:24]
+            y_values_arr_2 = hourly_pollen_json["hourly"]["mugwort_pollen"][24:48]
+            y_values_arr_3 = hourly_pollen_json["hourly"]["mugwort_pollen"][48:]
             if y_values_arr_1[0]=="nan":
                 pollen_available = False
             active_button = "btn_mugwort"
@@ -929,9 +885,9 @@ def pollen():
                                    pollen_available=pollen_available,location_city=city_name)
         # When Olive button is clicked.
         elif "btn_olive" in request.form:
-            y_values_arr_1 = hourly_pollen_json["olive_pollen"][0:24]
-            y_values_arr_2 = hourly_pollen_json["olive_pollen"][24:48]
-            y_values_arr_3 = hourly_pollen_json["olive_pollen"][48:]
+            y_values_arr_1 = hourly_pollen_json["hourly"]["olive_pollen"][0:24]
+            y_values_arr_2 = hourly_pollen_json["hourly"]["olive_pollen"][24:48]
+            y_values_arr_3 = hourly_pollen_json["hourly"]["olive_pollen"][48:]
             if y_values_arr_1[0]=="nan":
                 pollen_available = False
             active_button = "btn_olive"
@@ -941,9 +897,9 @@ def pollen():
                                    pollen_available=pollen_available,location_city=city_name)
         # When Ragweed button is clicked.
         elif "btn_ragweed" in request.form:
-            y_values_arr_1 = hourly_pollen_json["ragweed_pollen"][0:24]
-            y_values_arr_2 = hourly_pollen_json["ragweed_pollen"][24:48]
-            y_values_arr_3 = hourly_pollen_json["ragweed_pollen"][48:]
+            y_values_arr_1 = hourly_pollen_json["hourly"]["ragweed_pollen"][0:24]
+            y_values_arr_2 = hourly_pollen_json["hourly"]["ragweed_pollen"][24:48]
+            y_values_arr_3 = hourly_pollen_json["hourly"]["ragweed_pollen"][48:]
             if y_values_arr_1[0]=="nan":
                 pollen_available = False
             active_button = "btn_ragweed"
@@ -952,9 +908,9 @@ def pollen():
                                    pollen_available=pollen_available,location_city=city_name)
     # Data to display initially when the pollen page is opened is Alder pollen.
     else:
-        y_values_arr_1 = hourly_pollen_json["alder_pollen"][0:24]
-        y_values_arr_2 = hourly_pollen_json["alder_pollen"][24:48]
-        y_values_arr_3 = hourly_pollen_json["alder_pollen"][48:]
+        y_values_arr_1 = hourly_pollen_json["hourly"]["alder_pollen"][0:24]
+        y_values_arr_2 = hourly_pollen_json["hourly"]["alder_pollen"][24:48]
+        y_values_arr_3 = hourly_pollen_json["hourly"]["alder_pollen"][48:]
         if y_values_arr_1[0] == "nan":
             pollen_available = False
         graph_created = create_graph(x_value_arr,y_values_arr_1,"grains",y_values_arr_2,y_values_arr_3,total_day_1,total_day_2,total_day_3,"X")
@@ -980,8 +936,5 @@ def sports():
     else:
         return redirect(url_for("index"))
 
-# Running the flask app.
 if __name__=="__main__":
     app.run(debug=True)
-
-
