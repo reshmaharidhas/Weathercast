@@ -114,6 +114,7 @@ def index():
                 session["clicked_search_button"] = False
                 clicked_btn = next((k for k in request.form if k.startswith("btn")), None)
                 ptr_index = int(clicked_btn[3:])
+                session["last_clicked_ptr"] = ptr_index
             cities_arr = session.get("cities_arr")
             cities_lat_arr = session.get("cities_lat_arr")
             cities_lon_arr = session.get("cities_lon_arr")
@@ -938,3 +939,4 @@ def sports():
 
 if __name__=="__main__":
     app.run(debug=True)
+
