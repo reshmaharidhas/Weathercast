@@ -1,29 +1,325 @@
 {% extends "basefile.html" %}
 {% block content %}
-<div class="container mx-auto text-center pt-3">
+
+<div class="container-fluid mx-auto text-center pt-1">
+    <form action="" method="POST" class="pb-1">
+            <div class="row">
+                <div class="col-md-7">
+                    <input type="text" name="location_entered" class="form-control" placeholder="Enter city">
+                </div>
+                <div class="col-md-1 container">
+                    <button type="submit" name="search_button" value="search_location" class="btn btn-primary my-1">
+                        Search <img width="25" height="25" src="https://img.icons8.com/ios/250/FFFFFF/search.png" alt="search" class="img-fluid"/>
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle my-1" type="button" data-bs-toggle="dropdown">Choose city
+                        <span class="caret"></span></button>
+                        <div class="dropdown-menu bg-info">
+                            {% for curr_city_name in cities_arr %}
+                            <button type="submit" name="btn{{loop.index0}}" class="dropdown-item">{{curr_city_name}}</button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    {% if modified in starred_locations %}
+                        <button type="submit" name="star_btn" value="star" class="btn bg-primary my-1">
+                            <img width="18" height="18" src="https://img.icons8.com/fluency/48/filled-star.png" alt="filled-star"/>
+                        </button>
+                    {% else %}
+                        <button type="submit" name="star_btn" value="star" class="btn bg-info border border-primary my-1">
+                            <img width="18" height="18" src="https://img.icons8.com/ios/50/star--v1.png" alt="star--v1"/>
+
+                        </button>
+                    {% endif %}
+                </div>
+                <div class="col-md-1">
+                    {% if curr_temp_unit %}
+                        <button type="submit" name="c_f_temp_unit" value="F" class="btn btn-primary my-1">℉</button>
+                    {% else %}
+                        <button type="submit" name="c_f_temp_unit" value="C" class="btn btn-primary my-1">℃</button>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for msg in messages %}
-                <h3 class="text-danger">{{msg}}</h3>
+                <h5 class="text-danger">{{msg}}</h5>
             {% endfor %}
         {% endif %}
     {% endwith %}
 
     {% if location_city=="" %}
         <h4></h4>
-    {% else %}
-        <h4>Location: {{location_city}}, {{location_country}}</h4>
     {% endif %}
 
     {% if is_lat_lon_correct %}
-        <div class="container">
-            <p>Latitude: {{lat_var}}, Longitude: {{lon_var}}</p>
-            <h5>Temperature: {{curr_temp}}&#8451;</h5>
-            <h5>Feels like {{feels_like_temp}}&#8451;</h5>
-            <h5>{{curr_weather_desc_1}}</h5>
-            <h5>Min: {{min_temp}}&#8451;, Max: {{max_temp}}&#8451;</h5>
+        <div class="container-fluid bg-info rounded">
+            <div class="row">
+                <div class="col-md-6 py-4">
+                    <!--Basic weather details -->
+                    <div class="container-fluid rounded" style="background-color:#6FE6FC">
+                        <div class="row text-start">
+                            <h3>{{location_city}}</h3>
+                            <h5>{{location_region}}, {{location_country}}</h5>
+                            <p>Latitude: {{lat_var}}, Longitude: {{lon_var}}</p>
+                            <p>Local time: {{curr_local_time}}</p>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h1>{{curr_temp}}{{curr_temp_unit_value}}</h1>
+                                <h5>Feels like {{feels_like_temp}}{{curr_temp_unit_value}}</h5>
+                                <h4>{{curr_weather_desc_1}}</h4>
+                                <h5>{{curr_weather_desc_2}}</h5>
+                                <h6>Min: {{min_temp}}{{curr_temp_unit_value}}, Max: {{max_temp}}{{curr_temp_unit_value}}</h6>
+                            </div>
+                            <div class="col text-start">
+                                <h6><img width="22" height="22" src="https://img.icons8.com/external-justicon-lineal-justicon/22/external-sun-weather-justicon-lineal-justicon-1.png" alt="external-sun-weather-justicon-lineal-justicon-1"/> UV index: {{curr_uv_index}}</h6>
+                                <h6><img width="22" height="22" src="https://img.icons8.com/ios/50/intense-rain.png" alt="intense-rain"/> Chance of rain: {{curr_chance_rain}}%</h6>
+                                <h6><img width="22" height="22" src="https://img.icons8.com/ios/50/wind-speed-43-47.png" alt="wind-speed-43-47"/> Wind speed: {{curr_wind_speed}} m/s</h6>
+                                <h6><img width="22" height="22" src="https://img.icons8.com/glyph-neue/64/barometer-gauge.png" alt="barometer-gauge"/> Pressure: {{curr_pressure}} hPa</h6>
+                                <h6><img width="22" height="22" src="https://img.icons8.com/badges/22/hygrometer.png" alt="hygrometer"/> Humidity: {{curr_humidity}}%</h6>
+                                <h6><img width="22" height="22" src="https://img.icons8.com/metro/22/visible.png" alt="visible"/> Visibility: {{curr_visibility}} m</h6>
+                                <h6><img width="22" height="22" src="https://img.icons8.com/external-others-iconmarket/22/external-clouds-weather-others-iconmarket-2.png" alt="external-clouds-weather-others-iconmarket-2"/> Cloudiness: {{curr_cloudiness}}%</h6>
+                                <h6><img width="22" height="22" src="https://img.icons8.com/ios/22/dew-point.png" alt="dew-point"/> Dew point: {{curr_dewpoint}}{{curr_temp_unit_value}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sun and moon rise and set times -->
+                    <div class="container p-2">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <image src="{{url_for('static',filename='images/icons8-sunrise-48.png')}}"></image>
+                                <p>Sunrise</p>
+                                <p>{{current_day_sunrise}}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <image src="{{url_for('static',filename='images/icons8-sunset-48.png')}}"></image>
+                                <p>Sunset</p>
+                                <p>{{current_day_sunset}}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <image src="{{url_for('static',filename='images/moonrise.png')}}"></image>
+                                <p>Moon rise</p>
+                                <p>{{current_day_moonrise}}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <image src="{{url_for('static',filename='images/moonset.png')}}"></image>
+                                <p>Moon set</p>
+                                <p>{{current_day_moonset}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Air Quality Index -->
+                    <div class="container p-2 rounded" style="background-color:#6FE6FC">
+                        <div class="row container">
+                            <div class="col container">
+                                <h4>Air Quality Index</h4>
+                                <h5>{{aqi_us_epa_index}}</h5>
+                                <h6>Carbon Monoxide: {{curr_carbon_monoxide}}</h6>
+                                <h6>Nitrogen dioxide: {{curr_nitrogen_dioxide}}</h6>
+                                <h6>Ozone: {{curr_ozone}}</h6>
+                                <h6>Sulphur dioxide: {{curr_sulphur_dioxide}}</h6>
+                                <h6>PM2.5: {{curr_pm2_5}}</h6>
+                                <h6>PM10: {{curr_pm10}}</h6>
+                            </div>
+                            <div class="col container">
+                                <h4 class="pb-2">Moon phase</h4>
+                                <image src="{{url_for('static',filename=moon_phase_selected)}}" class="img-fluid" style="width:100px"></image>
+                                <h6 class="pt-2">{{moon_phase}}</h6>
+                                <h6>Illumination {{moon_illumination}}%</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 py-4">
+                    <h5><img width="25" height="25" src="https://img.icons8.com/external-tanah-basah-basic-outline-tanah-basah/25/1A1A1A/external-hour-date-and-time-tanah-basah-basic-outline-tanah-basah.png" alt="external-hour-date-and-time-tanah-basah-basic-outline-tanah-basah"/> Hourly Forecast</h5>
+                    <div class="row container fw-bold pt-2">
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>0:00</p>
+                                <img src="{{temp_hour_icon_arr[0]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[0]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>1:00</p>
+                                <img src="{{temp_hour_icon_arr[1]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[1]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>2:00</p>
+                                <img src="{{temp_hour_icon_arr[2]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[2]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>3:00</p>
+                                <img src="{{temp_hour_icon_arr[3]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[3]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>4:00</p>
+                                <img src="{{temp_hour_icon_arr[4]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[4]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>5:00</p>
+                                <img src="{{temp_hour_icon_arr[5]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[5]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Second row-->
+                    <div class="row container pt-2 fw-bold">
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>6:00</p>
+                                <img src="{{temp_hour_icon_arr[6]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[6]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>7:00</p>
+                                <img src="{{temp_hour_icon_arr[7]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[7]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>8:00</p>
+                                <img src="{{temp_hour_icon_arr[8]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[8]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>9:00</p>
+                                <img src="{{temp_hour_icon_arr[9]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[9]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>10:00</p>
+                                <img src="{{temp_hour_icon_arr[10]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[10]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>11:00</p>
+                                <img src="{{temp_hour_icon_arr[11]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[11]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Third row -->
+                    <div class="row container fw-bold pt-2">
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>12:00</p>
+                                <img src="{{temp_hour_icon_arr[12]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[12]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>13:00</p>
+                                <img src="{{temp_hour_icon_arr[13]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[13]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>14:00</p>
+                                <img src="{{temp_hour_icon_arr[14]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[14]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>15:00</p>
+                                <img src="{{temp_hour_icon_arr[15]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[15]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>16:00</p>
+                                <img src="{{temp_hour_icon_arr[16]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[16]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>17:00</p>
+                                <img src="{{temp_hour_icon_arr[17]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[17]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fourth row -->
+                    <div class="row container fw-bold pt-2">
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>18:00</p>
+                                <img src="{{temp_hour_icon_arr[18]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[18]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>19:00</p>
+                                <img src="{{temp_hour_icon_arr[19]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[19]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>20:00</p>
+                                <img src="{{temp_hour_icon_arr[20]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[20]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>21:00</p>
+                                <img src="{{temp_hour_icon_arr[21]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[21]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>22:00</p>
+                                <img src="{{temp_hour_icon_arr[22]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[22]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                        <div class="col container">
+                            <div class="container hourly-bg">
+                                <p>23:00</p>
+                                <img src="{{temp_hour_icon_arr[23]}}" class="img-fluid"/>
+                                <p>{{temp_at_hour_arr[23]}}{{curr_temp_unit_value}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     {% endif %}
 </div>
-
 {% endblock %}
