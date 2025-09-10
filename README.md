@@ -15,7 +15,9 @@ Python web app to check weather for different locations built using Flask
 - Flask
 
 ## API used
-- OpenWeatherMap API
+- OpenWeatherMap
+- WeatherAPI
+- Open-Meteo
  
 # Development Tools
 - PyCharm IDE
@@ -25,7 +27,7 @@ Python web app to check weather for different locations built using Flask
 
 ## Running in IDE⚙️
 Before running the application files in your IDE,
-- Obtain API key from OpenWeatherMap API.
+- Obtain API key from OpenWeatherMap API, WeatherAPI.
 - Insert your API keys into environment file at appropriate places in the code and replace with your new registered API keys = 'API_KEY'
 - Run the app.py file.
 
