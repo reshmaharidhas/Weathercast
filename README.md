@@ -4,11 +4,11 @@
  <img src="https://img.shields.io/github/languages/top/reshmaharidhas/Weathercast?labelColor=%23000"/>
  <img src="https://img.shields.io/github/repo-size/reshmaharidhas/Weathercast?labelColor=%23000"/>
  <img src="https://img.shields.io/github/created-at/reshmaharidhas/Weathercast?labelColor=%23000"/>
+ <img src="https://img.shields.io/github/languages/count/reshmaharidhas/Weathercast?labelColor=%23000"/>
  <img src="https://img.shields.io/github/license/reshmaharidhas/Weathercast?labelColor=%23000"/>
 </p>
 Weathercast is a web app to check weather for different locations built using Python and Flask.
-<img width="1919" height="969" alt="weathercast-webapp_3" src="https://github.com/user-attachments/assets/a4e02c41-6db5-4ff2-a35d-4d5267cb9590" />
-
+<img width="1919" height="969" alt="weathercast-webapp_3" src="https://github.com/user-attachments/assets/db60705a-908f-46ba-9042-b2b9a677d895" />
 
 # Tech Stack💻
 - Python
