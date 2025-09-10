@@ -1,0 +1,10 @@
+.card, .hourly-bg{
+    background-color: #6FE6FC;
+    color: #000000;
+}
+a{
+    text-decoration: None;
+}
+a:active{
+    color:yellow;
+}
