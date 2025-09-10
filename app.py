@@ -32,6 +32,8 @@ pollen_response = {}
 hourly_var = ""
 hourly_pollen_json = {}
 graph_created = ""
+cities_lat_arr = []
+cities_lon_arr = []
 
 # The home page, and the weathercast web page opens the index() function.
 @app.route('/')
@@ -980,3 +982,4 @@ def sports():
 # Running the flask app.
 if __name__=="__main__":
     app.run(debug=True)
+
