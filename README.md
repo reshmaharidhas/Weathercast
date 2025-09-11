@@ -12,10 +12,13 @@ Weathercast is a web app to check weather for different locations built using Py
 
 # Tech Stack💻
 - Python
+- Flask
 - HTML5
 - CSS3
 - Bootstrap 5
-- Flask
+- Matplotlib
+- Seaborn
+- REST API
 
 ## API used
 - OpenWeatherMap
@@ -27,6 +30,12 @@ Weathercast is a web app to check weather for different locations built using Py
 
 # Deployment Tools
 - Vercel
+
+# Screenshots
+<img width="1919" height="968" alt="forecasts_1" src="https://github.com/user-attachments/assets/60755a49-3486-4169-b314-a9cfb863256d" />
+<img width="1919" height="961" alt="forecasts_2" src="https://github.com/user-attachments/assets/57e9b1f2-77aa-4f49-aba2-e715c11533d4" />
+<img width="1919" height="969" alt="pollen_forecast_1" src="https://github.com/user-attachments/assets/06a496c4-1c57-433c-bb8c-fde47cdb7f46" />
+<img width="1919" height="964" alt="sports" src="https://github.com/user-attachments/assets/626ec687-0624-4874-ac9f-c8f8ac3f5dc9" />
 
 ## Running in IDE⚙️
 Before running the application files in your IDE,
